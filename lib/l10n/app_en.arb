@@ -1,0 +1,31 @@
+{
+  "language": "Language",
+  "english": "English",
+  "arabic": "Arabic",
+  "theme": "Theme",
+  "home": "Home",
+  "goToHome": "Go to home",
+  "dark": "Dark",
+  "newsApp": "News App",
+  "light": "Light",
+    "goodMorningNews": "Good morning, here is some news for you",
+
+    "general": "General",
+
+    "business": "Business",
+
+    "sports": "Sports",
+
+    "health": "Health",
+
+    "entertainment": "Entertainment",
+
+    "technology": "Technology",
+
+    "science": "Science",
+
+    "viewAll": "View all",
+    "viewFullArticle":"View Full Article",
+    "search":"Searcg"
+
+}

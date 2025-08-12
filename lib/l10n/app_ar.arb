@@ -1,0 +1,34 @@
+{
+  "language": "اللغة",
+  "english": "الإنجليزية",
+  "arabic": "العربية",
+  "theme": "الثيم",
+  "home": "الرئيسية",
+  "goToHome": "الرجوع للرئيسية",
+  "newsApp": "تطبيق الأخبار",
+  "dark": "داكن",
+  "light": "فاتح",
+
+    "goodMorningNews": "صباح الخير، إليك بعض الأخبار",
+
+    "general": "عام",
+
+    "business": "الأعمال",
+
+    "sports": "رياضة",
+
+    "health": "صحة",
+
+    "entertainment": "ترفيه",
+
+    "technology": "تكنولوجيا",
+
+    "science": "علوم",
+
+    "viewAll": "عرض الكل",
+
+    "viewFullArticle": "عرض المقال كاملاً",
+    "search":"بحث"
+
+
+}
