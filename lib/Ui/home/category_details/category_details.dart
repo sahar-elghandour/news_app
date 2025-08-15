@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/Ui/home/category_details/Source/source_tap_widget.dart';
+import 'package:news_app/Ui/home/category_details/sources-view-model.dart';
 import 'package:news_app/api/api_manager.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/utils/app_colors.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/SourceResponse.dart';
 
@@ -16,54 +18,98 @@ class CategoryDetails extends StatefulWidget {
     this.searchQuery = '',
   });
 
+
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();
 }
 
 class _CategoryDetailsState extends State<CategoryDetails> {
   int selectedSourceIndex = 0;
+  SourcesViewModel viewModel=SourcesViewModel();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // fill list
+    viewModel.getSources(widget.category.id);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SourceResponse?>(
-      future: ApiManager.getSources(widget.category.id),
-      builder: (context, snapshot) {
-        //todo:loading
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        //todo:error => client
-        if (snapshot.hasError) {
-          return buildErrorUI("Something went wrong.");
-        }
-        //todo:server => response  => success , error
-        //todo:server => error
-        if (snapshot.data?.status != 'ok') {
-          return buildErrorUI(snapshot.data?.message ?? "Unknown error");
-        }
+    return ChangeNotifierProvider(
+      create: (context)=>viewModel,
+      child:Consumer<SourcesViewModel>(
+    builder: (context, viewModel, child)
+    {
+      // todo: error from client or server based on error message
+      if(viewModel.errorMessage != null){
+        return buildErrorUI(viewModel.errorMessage!);
 
-        var sourcesList = snapshot.data?.sources ?? [];
-        if (sourcesList.isEmpty) {
-          return Center(
-            child: Text("No data found",
-                style: Theme.of(context).textTheme.headlineLarge),
+      }
+      else if(viewModel.sourcesList ==null){
+        // todo: loading
+        return const Center(child: CircularProgressIndicator());
 
+
+      }else{
+    //todo: success
+
+    return SourceTapWidget(
+    sourcesList: viewModel.sourcesList!,
+    searchQuery: widget.searchQuery,
+    initialIndex: selectedSourceIndex,
+    onTabChanged: (index) {
+    setState(() {
+    selectedSourceIndex = index;
+    });
+      });
+      }
+
+    },
+          /*
+      FutureBuilder<SourceResponse?>(
+        future: ApiManager.getSources(widget.category.id),
+        builder: (context, snapshot) {
+          //todo:loading
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          //todo:error => client
+          if (snapshot.hasError) {
+            return buildErrorUI("Something went wrong.");
+          }
+          //todo:server => response  => success , error
+          //todo:server => error
+          if (snapshot.data?.status != 'ok') {
+            return buildErrorUI(snapshot.data?.message ?? "Unknown error");
+          }
+
+          var sourcesList = snapshot.data?.sources ?? [];
+          if (sourcesList.isEmpty) {
+            return Center(
+              child: Text("No data found",
+                  style: Theme.of(context).textTheme.headlineLarge),
+
+            );
+          }
+          //todo:server => success
+
+          return SourceTapWidget(
+            sourcesList: sourcesList,
+            searchQuery: widget.searchQuery,
+            initialIndex: selectedSourceIndex,
+            onTabChanged: (index) {
+              setState(() {
+                selectedSourceIndex = index;
+              });
+            },
           );
-        }
-        //todo:server => success
-
-        return SourceTapWidget(
-          sourcesList: sourcesList,
-          searchQuery: widget.searchQuery,
-          initialIndex: selectedSourceIndex,
-          onTabChanged: (index) {
-            setState(() {
-              selectedSourceIndex = index;
-            });
-          },
-        );
-      },
+        },
+      ),
     );
+
+           */
+    ));
   }
 
   Widget buildErrorUI(String message) {
@@ -73,7 +119,10 @@ class _CategoryDetailsState extends State<CategoryDetails> {
         children: [
           Text(message, style: Theme.of(context).textTheme.labelMedium),
           ElevatedButton(
-            onPressed: () => setState(() {}),
+            onPressed: () {
+              viewModel.getSources(widget.category.id);
+
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.greyColor,
             ),
