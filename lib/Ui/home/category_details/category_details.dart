@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/Ui/home/category_details/Source/source_tap_widget.dart';
 import 'package:news_app/api/api_manager.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 import '../../../model/SourceResponse.dart';
-
+import 'cubit/sources-states.dart';
+import 'cubit/sources-view-model.dart';
 class CategoryDetails extends StatefulWidget {
   final Category category;
   final String searchQuery;
@@ -22,10 +24,48 @@ class CategoryDetails extends StatefulWidget {
 
 class _CategoryDetailsState extends State<CategoryDetails> {
   int selectedSourceIndex = 0;
+  SourcesViewModel viewModel =SourcesViewModel();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    viewModel.getSources(widget.category.id);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SourceResponse?>(
+    return BlocProvider(
+      create: (context)=> viewModel,
+      child: BlocBuilder<SourcesViewModel,SourcesStates>(
+          builder: (context, state) {
+            if(state is SourcesLoadingState){
+              return const Center(child: CircularProgressIndicator());
+
+            }else if(state is SourcesErrorState){
+              return buildErrorUI(state.errorMessage!);
+
+
+            }else if(state is SourcesSuccessState){
+              return SourceTapWidget(
+                sourcesList: state.sourcesList!,
+                searchQuery: widget.searchQuery,
+                initialIndex: selectedSourceIndex,
+                onTabChanged: (index) {
+                  setState(() {
+                    selectedSourceIndex = index;
+                  });
+                },
+              );
+            }
+            return Container();
+
+          }
+
+      ),
+    );
+  }
+
+  /*FutureBuilder<SourceResponse?>(
       future: ApiManager.getSources(widget.category.id),
       builder: (context, snapshot) {
         //todo:loading
@@ -64,7 +104,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
         );
       },
     );
-  }
+
+       */
+
 
   Widget buildErrorUI(String message) {
     return Center(
@@ -73,7 +115,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
         children: [
           Text(message, style: Theme.of(context).textTheme.labelMedium),
           ElevatedButton(
-            onPressed: () => setState(() {}),
+            onPressed: () {
+              viewModel.getSources(widget.category.id);
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.greyColor,
             ),
@@ -87,4 +131,3 @@ class _CategoryDetailsState extends State<CategoryDetails> {
     );
   }
 }
-

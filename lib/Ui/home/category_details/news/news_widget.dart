@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/Ui/home/category_details/news/news_item.dart';
 import 'package:news_app/api/api_manager.dart';
 import 'package:news_app/model/SourceResponse.dart';
@@ -6,7 +7,9 @@ import 'package:news_app/utils/app_styles.dart';
 
 import '../../../../model/NewsResponse.dart';
 import '../../../../utils/app_colors.dart';
-
+import 'cubit/news-states.dart';
+import 'cubit/news-view-model.dart';
+/*
 class NewsWidget extends StatefulWidget {
   final Source source;
   final String searchQuery;
@@ -115,4 +118,165 @@ class _NewsWidgetState extends State<NewsWidget> {
   }
 }
 
+ */
+class NewsWidget extends StatefulWidget {
+  final Source source;
+
+  NewsWidget({super.key, required this.source});
+
+  @override
+  State createState() => _NewsWidgetState();
+}
+
+class _NewsWidgetState extends State<NewsWidget> {
+  NewsViewModel viewModel = NewsViewModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    viewModel.getNewsBySourceId(widget.source.id ?? '');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var height = MediaQuery
+        .of(context)
+        .size
+        .height;
+
+    return BlocBuilder<NewsViewModel, NewsStates>
+      (bloc: viewModel,
+        builder: (context, state) {
+          if (state is NewsErrorState) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(state.errorMessage!,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .labelMedium,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      viewModel.getNewsBySourceId(widget.source.id ?? '');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.greyColor,
+                    ),
+                    child: Text(
+                      "Try again",
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .labelMedium,
+                    ),
+                  )
+                ],
+              ),
+            );
+          } else if (state is NewsSuccessState) {
+            return ListView.builder(
+              itemCount: state.newsList?.length,
+              itemBuilder: (context, index) {
+                return NewsItem(news: state.newsList![index]);
+              },
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                color: AppColors.greyColor,
+              ),
+            );
+          }
+        });
+  }
+/*
+      FutureBuilder<NewsResponse?>(
+      future: ApiManager.getNewsBySourceId(widget.source.id ?? ''),
+      builder: (context, snapshot) {
+        //todo: Loading
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: AppColors.greyColor,
+              ),
+          );
+        }
+
+        //todo: client error
+        else if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Something went wrong.",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ApiManager.getNewsBySourceId(widget.source.id ?? '');
+                    setState(() {});
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.greyColor,
+                  ),
+                  child: Text(
+                    "Try again",
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        //todo: Server error
+        if (snapshot.data?.status != 'ok') {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  snapshot.data?.message ?? "Unknown error",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ApiManager.getNewsBySourceId(widget.source.id ?? '');
+                    setState(() {});
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.greyColor,
+                  ),
+                  child: Text(
+                    "Try again",
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        //todo: Success
+        var newsList = snapshot.data?.articles ?? [];
+        return ListView.builder(
+          itemCount: newsList.length,
+          itemBuilder: (context, index) {
+            return NewsItem(news: newsList[index]);
+          },
+        );
+      },
+    );
+
+
+
+}
+
+ */
+}
 
