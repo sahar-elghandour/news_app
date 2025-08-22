@@ -1,5 +1,5 @@
 import 'package:news_app/utils/assets_manager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class Category {
   String id;
   String title;

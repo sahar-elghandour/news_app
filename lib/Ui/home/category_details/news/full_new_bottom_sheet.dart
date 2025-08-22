@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/utils/assets_manager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../model/NewsResponse.dart';
 import '../../../../utils/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
