@@ -1,10 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/Ui/home/category_details/cubit/sources-states.dart';
+import 'package:news_app/data/repository/sources/data-sources/remote/impl/source-remote-data-source-impl.dart';
+import 'package:news_app/data/repository/sources/data-sources/remote/source-remote-data-source.dart';
+import 'package:news_app/data/repository/sources/repository/impl/source-repository-impl.dart';
+import 'package:news_app/data/repository/sources/repository/source-repository.dart';
 
 import '../../../../api/api_manager.dart';
 
 class SourcesViewModel extends Cubit<SourcesStates>{
-  SourcesViewModel():super(SourcesLoadingState());
+  late SourceRepository sourceRepository;
+
+  SourcesViewModel({required this.sourceRepository}):super(SourcesLoadingState());
+
   //todo: hold data handel logic
   //List<Source>? sourcesList;
   //String? errorMassege;
@@ -12,7 +19,7 @@ class SourcesViewModel extends Cubit<SourcesStates>{
     try{
       //todo: loading
       emit(SourcesLoadingState());
-      var response =await ApiManager.getSources(categoryId);
+      var response =await sourceRepository.getSources(categoryId);
       if(response?.status =='error'){
         // todo: server error
         emit(SourcesErrorState(errorMessage: response!.message!));

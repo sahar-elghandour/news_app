@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/Ui/home/category_details/Source/source_tap_widget.dart';
 import 'package:news_app/api/api_manager.dart';
+import 'package:news_app/di/di.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/utils/app_colors.dart';
 
@@ -24,7 +25,7 @@ class CategoryDetails extends StatefulWidget {
 
 class _CategoryDetailsState extends State<CategoryDetails> {
   int selectedSourceIndex = 0;
-  SourcesViewModel viewModel =SourcesViewModel();
+  SourcesViewModel viewModel =SourcesViewModel(sourceRepository: injectionSourceRepository());
   @override
   void initState() {
     // TODO: implement initState
