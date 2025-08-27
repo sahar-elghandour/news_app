@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../providers/app_language_provider.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_styles.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class LanguageBottomSheet extends StatefulWidget{
   @override
   State<LanguageBottomSheet> createState() => _LanguageBottomSheetState();

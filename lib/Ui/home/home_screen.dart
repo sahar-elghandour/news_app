@@ -6,11 +6,12 @@ import 'package:news_app/Ui/home/theme/theme_bottom_sheet.dart';
 import 'package:news_app/model/category.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:news_app/utils/assets_manager.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/api_manager.dart';
+import '../../l10n/app_localizations.dart';
 import '../../model/SourceResponse.dart';
 import '../../providers/app_language_provider.dart';
 import '../../providers/app_theme_provider.dart';
@@ -117,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
      ? CategoryFragment(onCategoryItemClick: onCategoryItemClick)
         : CategoryDetails(
     category: selectedCategory!,
-    searchQuery: searchText,
+    //searchQuery: searchText,
     ));
 
 
