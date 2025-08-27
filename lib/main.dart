@@ -5,9 +5,10 @@ import 'package:news_app/providers/app_theme_provider.dart';
 import 'package:news_app/splash_screen/splash_screen.dart';
 import 'package:news_app/utils/app_routes.dart';
 import 'package:news_app/utils/app_theme.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:provider/provider.dart';
 import 'Ui/home/home_screen.dart';
+import 'l10n/app_localizations.dart';
 
 void main() {
 
