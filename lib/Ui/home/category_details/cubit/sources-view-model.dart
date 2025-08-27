@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:news_app/Ui/home/category_details/cubit/sources-states.dart';
 import 'package:news_app/data/repository/sources/data-sources/remote/impl/source-remote-data-source-impl.dart';
 import 'package:news_app/data/repository/sources/data-sources/remote/source-remote-data-source.dart';
@@ -6,7 +7,7 @@ import 'package:news_app/data/repository/sources/repository/impl/source-reposito
 import 'package:news_app/data/repository/sources/repository/source-repository.dart';
 
 import '../../../../api/api_manager.dart';
-
+@injectable
 class SourcesViewModel extends Cubit<SourcesStates>{
   late SourceRepository sourceRepository;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/Ui/home/category_details/news/news_item.dart';
 import 'package:news_app/api/api_manager.dart';
+import 'package:news_app/di/di-injectable.dart';
 import 'package:news_app/di/di.dart';
 import 'package:news_app/model/SourceResponse.dart';
 import 'package:news_app/utils/app_styles.dart';
@@ -130,7 +131,7 @@ class NewsWidget extends StatefulWidget {
 }
 
 class _NewsWidgetState extends State<NewsWidget> {
-  NewsViewModel viewModel = NewsViewModel(newsRepository: injectionNewsRepository());
+  NewsViewModel viewModel = getIt<NewsViewModel>();
 
   @override
   void initState() {

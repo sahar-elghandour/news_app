@@ -1,11 +1,26 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
 import 'package:news_app/api/api_constant.dart';
 import 'package:news_app/api/endpoints.dart';
 import 'package:news_app/model/NewsResponse.dart';
 import 'package:news_app/model/SourceResponse.dart';
+@singleton
 class ApiManager{
+  /*
+  static ApiManager? _instance;
+  // private constructor
+  ApiManager._();
+static  ApiManager getInstance(){
+  if(_instance ==null){
+    _instance =ApiManager._();
+  }
+  return _instance!;
+
+  }
+
+   */
 
    Future<SourceResponse?> getSources(String categoryId) async {
     Uri url =Uri.https(ApiConstant.baseUrl,EndPoints.sourceApi,{
