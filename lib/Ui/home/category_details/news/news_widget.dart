@@ -6,7 +6,7 @@ import 'package:news_app/utils/app_styles.dart';
 
 import '../../../../model/NewsResponse.dart';
 import '../../../../utils/app_colors.dart';
-
+/*
 class NewsWidget extends StatefulWidget {
   final Source source;
   final String searchQuery;
@@ -112,6 +112,102 @@ class _NewsWidgetState extends State<NewsWidget> {
   void dispose() {
     scrollController.dispose();
     super.dispose();
+  }
+}
+
+ */
+class NewsWidget extends StatefulWidget {
+  final Source source;
+
+  NewsWidget({super.key, required this.source});
+
+  @override
+  State createState() => _NewsWidgetState();
+}
+
+class _NewsWidgetState extends State<NewsWidget> {
+  @override
+  Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+
+    return FutureBuilder<NewsResponse?>(
+      future: ApiManager.getNewsBySourceId(widget.source.id ?? ''),
+      builder: (context, snapshot) {
+        // Loading state
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: AppColors.greyColor,
+            ),
+          );
+        }
+
+        // Error (client-side)
+        else if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Something went wrong.",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ApiManager.getNewsBySourceId(widget.source.id ?? '');
+                    setState(() {});
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.greyColor,
+                  ),
+                  child: Text(
+                    "Try again",
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        // Server error
+        if (snapshot.data?.status != 'ok') {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  snapshot.data?.message ?? "Unknown error",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ApiManager.getNewsBySourceId(widget.source.id ?? '');
+                    setState(() {});
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.greyColor,
+                  ),
+                  child: Text(
+                    "Try again",
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+
+        // Success state
+        var newsList = snapshot.data?.articles ?? [];
+        return ListView.builder(
+          itemCount: newsList.length,
+          itemBuilder: (context, index) {
+            return NewsItem(news: newsList[index]);
+          },
+        );
+      },
+    );
   }
 }
 

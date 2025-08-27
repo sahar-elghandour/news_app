@@ -60,7 +60,7 @@ class _SourceTapWidgetState extends State<SourceTapWidget> {
           Expanded(
             child: NewsWidget(
               source: widget.sourcesList[selectedIndex],
-              searchQuery: widget.searchQuery,
+              //searchQuery: widget.searchQuery,
             ),
           )
         ],

@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
      ? CategoryFragment(onCategoryItemClick: onCategoryItemClick)
         : CategoryDetails(
     category: selectedCategory!,
-    searchQuery: searchText,
+    //searchQuery: searchText,
     ));
 
 
